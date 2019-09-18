@@ -32,9 +32,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _getGifs().then((map) {
-      print(map);
-    });
   }
 
   @override
@@ -84,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   default:
-                    if (snapshot.error)
+                    if (snapshot.hasError)
                       return Container();
                     else
                       return _createGifTable(context, snapshot);
@@ -105,21 +102,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
-    return GridView.builder(
+    return GridView. builder(
       padding: EdgeInsets.all(10),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
       itemCount: _getCoutn(snapshot.data['data']),
       itemBuilder: (context, index) {
-        if (_search == null  || _search.isEmpty || index < snapshot.data['data'.length])
+        if (_search == null  || _search.isEmpty || index < snapshot.data['data'].length)
           return GestureDetector(
             // child: Image.network(
-            //   snapshot.data['date'][index]['images']['fixed_height']['url'],
+            //   snapshot.data['data'][index]['images']['fixed_height']['url'],
             //   height: 300,
             //   fit: BoxFit.cover,
             // ),
             child: FadeInImage.memoryNetwork(
-              image: snapshot.data['date'][index]['images']['fixed_height']['url'],
+              image: snapshot.data['data'][index]['images']['fixed_height']['url'],
               placeholder: kTransparentImage,
               height: 300,
               fit: BoxFit.cover,
@@ -129,10 +126,10 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          GifPage(snapshot.data['date'][index])));
+                          GifPage(snapshot.data['data'][index])));
             },
             onLongPress: (){
-              Share.share(snapshot.data['date'][index]['images']['fixed_height']['url']);
+              Share.share(snapshot.data['data'][index]['images']['fixed_height']['url']);
             },
           );
         else
